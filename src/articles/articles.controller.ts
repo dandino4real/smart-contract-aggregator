@@ -16,9 +16,13 @@ export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
   @Post()
-  async create(@Body() dto: CreateArticleDto) {
-    const created = await this.articlesService.create(dto);
-    return { success: true, article: created };
+  async create(@Body() createArticleDto: CreateArticleDto) {
+    const created = await this.articlesService.create(createArticleDto);
+    return {
+      success: true,
+      message: 'Article created successfully',
+      data: created,
+    };
   }
 
   @Get()
@@ -26,11 +30,21 @@ export class ArticlesController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('offset', new DefaultValuePipe(0), ParseIntPipe) offset: number,
   ) {
-    return this.articlesService.findAll(limit, offset);
+    const articles = await this.articlesService.findAll(limit, offset);
+    return {
+      success: true,
+      message: 'Articles fetched successfully',
+      ...articles,
+    };
   }
 
   @Get(':id')
   async get(@Param('id') id: string) {
-    return this.articlesService.findOne(id);
+    const article = await this.articlesService.findOne(id);
+    return {
+      success: true,
+      message: 'Article fetched successfully',
+      data: article,
+    };
   }
 }

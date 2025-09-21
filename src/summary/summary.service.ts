@@ -6,14 +6,20 @@ export class SummaryService {
   constructor(private readonly openAIClient: OpenAIClient) {}
 
   /**
-   * Generate a summary for a text. If OpenAI is available, use it.
+   * Generate a summary for a text. If OpenAI is available and not mocked, use it.
    * Otherwise, fallback to a simple extractive summarizer.
    */
   async generate(text: string): Promise<string> {
     if (!text || text.trim().length === 0) return '';
 
-    // prefer external API if configured
-    if (process.env.OPENAI_API_KEY && process.env.MOCK_OPENAI !== 'true') {
+    if (
+      process.env.NODE_ENV !== 'production' ||
+      process.env.MOCK_OPENAI === 'true'
+    ) {
+      return this.simpleExtractiveSummary(text);
+    }
+
+    if (process.env.OPENAI_API_KEY) {
       try {
         return await this.openAIClient.generateSummary(text);
       } catch (err) {
@@ -21,7 +27,7 @@ export class SummaryService {
       }
     }
 
-    // fallback: simple extractive summarizer
+    // Fallback: simple extractive summarizer
     return this.simpleExtractiveSummary(text);
   }
 
@@ -47,7 +53,7 @@ export class SummaryService {
         .filter(Boolean);
       let score = 0;
       for (const w of sWords) score += freq[w] || 0;
-      // normalize by length slightly (shorter sentences get small boost)
+      // Normalize by length slightly (shorter sentences get small boost)
       score = score / Math.sqrt(sWords.length || 1);
       return { sentence: s.trim(), score };
     });

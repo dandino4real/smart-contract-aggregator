@@ -12,17 +12,17 @@ export class ArticlesService {
     private readonly summaryService: SummaryService,
   ) {}
 
-  async create(createDto: CreateArticleDto) {
-    const { summary, content } = createDto;
+  async create(createArticleDto: CreateArticleDto) {
+    const { summary, content } = createArticleDto;
     let generatedSummary = summary;
     if (!generatedSummary || generatedSummary.trim() === '') {
       generatedSummary = await this.summaryService.generate(content);
     }
-    const created = new this.articleModel({
-      ...createDto,
+    const createdArticle = new this.articleModel({
+      ...createArticleDto,
       summary: generatedSummary,
     });
-    return created.save();
+    return createdArticle.save();
   }
 
   async findAll(limit = 10, offset = 0) {
@@ -38,20 +38,5 @@ export class ArticlesService {
 
   async findOne(id: string) {
     return this.articleModel.findById(id).exec();
-  }
-
-  // helper for recommendation/popularity updates
-  async incrementInteractions(articleId: string) {
-    return this.articleModel
-      .findByIdAndUpdate(
-        articleId,
-        { $inc: { interactionsCount: 1 } },
-        { new: true },
-      )
-      .exec();
-  }
-
-  async findByIds(ids: string[]) {
-    return this.articleModel.find({ _id: { $in: ids } }).exec();
   }
 }

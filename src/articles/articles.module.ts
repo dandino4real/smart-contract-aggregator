@@ -12,5 +12,6 @@ import { SummaryModule } from 'src/summary/summary.module';
   ],
   controllers: [ArticlesController],
   providers: [ArticlesService],
+  exports: [ArticlesService],
 })
 export class ArticlesModule {}

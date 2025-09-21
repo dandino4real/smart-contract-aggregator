@@ -7,8 +7,13 @@ export class UsersController {
   constructor(private usersService: UsersService) {}
 
   @Post()
-  async create(@Body() dto: CreateUserDto) {
-    const user = await this.usersService.create(dto);
-    return { success: true, user };
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
+
+    return {
+      success: true,
+      message: 'User created successfully',
+      data: user,
+    };
   }
 }

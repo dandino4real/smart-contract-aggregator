@@ -2,11 +2,11 @@ import { IsString } from 'class-validator';
 
 export class CreateInteractionDto {
   @IsString()
-  userId: string;
+  user_id: string;
 
   @IsString()
-  articleId: string;
+  article_id: string;
 
   @IsString()
-  interactionType: string;
+  interaction_type: string;
 }

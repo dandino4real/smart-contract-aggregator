@@ -7,8 +7,13 @@ export class InteractionsController {
   constructor(private readonly interactionsService: InteractionsService) {}
 
   @Post()
-  async create(@Body() dto: CreateInteractionDto) {
-    const saved = await this.interactionsService.create(dto);
-    return { success: true, interaction: saved };
+  async create(@Body() createInteractionDto: CreateInteractionDto) {
+    const savedInteractions =
+      await this.interactionsService.create(createInteractionDto);
+    return {
+      success: true,
+      message: 'Interaction created successfully',
+      data: savedInteractions,
+    };
   }
 }
