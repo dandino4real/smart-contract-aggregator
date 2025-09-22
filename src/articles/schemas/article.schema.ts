@@ -16,13 +16,6 @@ export class Article {
 
   @Prop({ default: '' })
   summary?: string;
-
-  @Prop({ type: [String], default: [] })
-  tags?: string[];
-
-  // popularity can be computed but storing a simple counter is ok
-  @Prop({ default: 0 })
-  interactionsCount?: number;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
