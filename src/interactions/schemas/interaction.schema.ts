@@ -6,13 +6,13 @@ export type InteractionDocument = Interaction & Document;
 @Schema({ timestamps: true })
 export class Interaction {
   @Prop({ required: true })
-  userId: string;
+  user_id: string;
 
   @Prop({ required: true })
-  articleId: string;
+  article_id: string;
 
   @Prop({ required: true })
-  interactionType: string; // 'view' | 'like' etc.
+  interaction_type: string; // 'view' | 'like' etc.
 }
 
 export const InteractionSchema = SchemaFactory.createForClass(Interaction);
